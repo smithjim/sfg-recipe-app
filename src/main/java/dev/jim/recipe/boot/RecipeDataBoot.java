@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
+    @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent applicationReadyEvent) {
         List<Recipe> recipes = this.buildRecipes();
@@ -51,6 +53,8 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
 
         Category americanCategory = fetchCategoryFromDescription("American");
         Category mexicanCategory = fetchCategoryFromDescription("Mexican");
+
+        log.info(americanCategory.toString());
 
 
         //Yummy Guac
@@ -91,9 +95,9 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         guacRecipe.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
         guacRecipe.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
 
+        guacRecipe.getCategories().add(americanCategory);
+        guacRecipe.getCategories().add(mexicanCategory);
 
-        guacRecipe.addCategories(americanCategory);
-        guacRecipe.addCategories(mexicanCategory);
 
         //add to return list
         recipes.add(guacRecipe);
@@ -150,8 +154,8 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         tacosRecipe.addIngredient(new Ingredient("cup sour cream thinned with 1/4 cup milk", new BigDecimal(4), cupsUom, tacosRecipe));
         tacosRecipe.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(4), eachUom, tacosRecipe));
 
-        tacosRecipe.addCategories(americanCategory);
-        tacosRecipe.addCategories(mexicanCategory);
+        tacosRecipe.getCategories().add(americanCategory);
+        tacosRecipe.getCategories().add(mexicanCategory);
 
         recipes.add(tacosRecipe);
         return recipes;

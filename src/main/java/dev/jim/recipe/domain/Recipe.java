@@ -34,13 +34,13 @@ public class Recipe {
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name="category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
         this.notes = notes;
@@ -48,20 +48,8 @@ public class Recipe {
     }
 
     public void addIngredient(Ingredient ingredient) {
-        if (this.getIngredients() == null) {
-            this.setIngredients(new HashSet<>());
-        }
-
         this.getIngredients().add(ingredient);
         ingredient.setRecipe(this);
     }
 
-    public void addCategories(Category category) {
-        if (this.getCategories() == null) {
-            this.setCategories(new HashSet<>());
-        }
-
-        this.getCategories().add(category);
-        //category.add(this);
-    }
 }

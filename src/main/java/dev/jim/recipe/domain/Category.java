@@ -17,13 +17,6 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes;
+    private Set<Recipe> recipes = new HashSet<>();
 
-    public void add(Recipe recipe) {
-        if (this.getRecipes() == null) {
-            this.setRecipes(new HashSet<>());
-        }
-
-        this.getRecipes().add(recipe);
-    }
 }
