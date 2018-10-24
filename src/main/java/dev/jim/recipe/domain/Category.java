@@ -1,6 +1,7 @@
 package dev.jim.recipe.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,5 +38,13 @@ public class Category {
 
     public void setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
+    }
+
+    public void add(Recipe recipe) {
+        if (this.getRecipes() == null) {
+            this.setRecipes(new HashSet<>());
+        }
+
+        this.getRecipes().add(recipe);
     }
 }

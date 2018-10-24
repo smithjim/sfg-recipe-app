@@ -1,6 +1,7 @@
 package dev.jim.recipe.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,8 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+
+    @Lob
     private String directions;
 
     @Lob
@@ -114,6 +117,7 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        notes.setRecipe(this);
     }
 
     public Set<Ingredient> getIngredients() {
@@ -122,6 +126,15 @@ public class Recipe {
 
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        if (this.ingredients == null) {
+            this.ingredients = new HashSet<>();
+        }
+
+        this.ingredients.add(ingredient);
+        ingredient.setRecipe(this);
     }
 
     public Difficulty getDifficulty() {
@@ -138,5 +151,14 @@ public class Recipe {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addCategories(Category category) {
+        if (this.getCategories() == null) {
+            this.setCategories(new HashSet<>());
+        }
+
+        this.getCategories().add(category);
+        category.add(this);
     }
 }
