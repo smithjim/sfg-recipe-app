@@ -48,11 +48,11 @@ public class Recipe {
     }
 
     public void addIngredient(Ingredient ingredient) {
-        if (this.ingredients == null) {
-            this.ingredients = new HashSet<>();
+        if (this.getIngredients() == null) {
+            this.setIngredients(new HashSet<>());
         }
 
-        this.ingredients.add(ingredient);
+        this.getIngredients().add(ingredient);
         ingredient.setRecipe(this);
     }
 
@@ -62,6 +62,6 @@ public class Recipe {
         }
 
         this.getCategories().add(category);
-        category.add(this);
+        //category.add(this);
     }
 }

@@ -4,9 +4,9 @@ import dev.jim.recipe.domain.*;
 import dev.jim.recipe.repository.CategoryRepository;
 import dev.jim.recipe.repository.RecipeRepository;
 import dev.jim.recipe.repository.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -37,6 +38,7 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
 
     private List<Recipe> buildRecipes() {
 
+        log.debug("Building example recipes");
         List<Recipe> recipes = new ArrayList<>(2);
 
         //get UOMs
@@ -88,6 +90,7 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         guacRecipe.addIngredient(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
         guacRecipe.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
         guacRecipe.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
+
 
         guacRecipe.addCategories(americanCategory);
         guacRecipe.addCategories(mexicanCategory);
