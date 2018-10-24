@@ -6,7 +6,6 @@ import dev.jim.recipe.repository.RecipeRepository;
 import dev.jim.recipe.repository.UnitOfMeasureRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -89,8 +88,8 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         guacRecipe.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
         guacRecipe.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
 
-        guacRecipe.addCategories(americanCategory);
-        guacRecipe.addCategories(mexicanCategory);
+        guacRecipe.getCategories().add(americanCategory);
+        guacRecipe.getCategories().add(mexicanCategory);
 
         //add to return list
         recipes.add(guacRecipe);
@@ -147,8 +146,8 @@ public class RecipeDataBoot implements ApplicationListener<ContextRefreshedEvent
         tacosRecipe.addIngredient(new Ingredient("cup sour cream thinned with 1/4 cup milk", new BigDecimal(4), cupsUom, tacosRecipe));
         tacosRecipe.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(4), eachUom, tacosRecipe));
 
-        tacosRecipe.addCategories(americanCategory);
-        tacosRecipe.addCategories(mexicanCategory);
+        tacosRecipe.getCategories().add(americanCategory);
+        tacosRecipe.getCategories().add(mexicanCategory);
 
         recipes.add(tacosRecipe);
         return recipes;

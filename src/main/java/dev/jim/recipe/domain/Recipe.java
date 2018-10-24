@@ -37,7 +37,7 @@ public class Recipe {
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name="category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -153,12 +153,4 @@ public class Recipe {
         this.categories = categories;
     }
 
-    public void addCategories(Category category) {
-        if (this.getCategories() == null) {
-            this.setCategories(new HashSet<>());
-        }
-
-        this.getCategories().add(category);
-        category.add(this);
-    }
 }
