@@ -1,4 +1,4 @@
-package dev.jim.recipeapp;
+package dev.jim.recipe;
 
 import dev.jim.recipe.RecipeApplication;
 import org.junit.Test;

@@ -82,13 +82,35 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void saveRecipeCommand() {
+    public void saveNewRecipeCommand() {
 
         Recipe returnRecipe = new Recipe();
         returnRecipe.setId(1L);
         returnRecipe.setDescription(DESCRIPTION);
 
         RecipeCommand recipeCmd = new RecipeCommand();
+        recipeCmd.setDescription(DESCRIPTION);
+
+        when(recipeRepository.save(any(Recipe.class))).thenReturn(returnRecipe);
+
+        RecipeCommand returned = recipeService.saveRecipeCommand(recipeCmd);
+
+        assertEquals(returnRecipe.getId(), returned.getId());
+        assertEquals(DESCRIPTION, returned.getDescription());
+
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+
+    }
+
+    @Test
+    public void saveOldRecipeCommand() {
+
+        Recipe returnRecipe = new Recipe();
+        returnRecipe.setId(3L);
+        returnRecipe.setDescription(DESCRIPTION);
+
+        RecipeCommand recipeCmd = new RecipeCommand();
+        recipeCmd.setId(returnRecipe.getId());
         recipeCmd.setDescription(DESCRIPTION);
 
         when(recipeRepository.save(any(Recipe.class))).thenReturn(returnRecipe);
