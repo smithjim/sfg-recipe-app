@@ -137,6 +137,18 @@ public class RecipeServiceImplTest {
         assertEquals(DESCRIPTION, returned.getDescription());
 
         verify(recipeRepository, times(1)).save(any(Recipe.class));
+    }
+
+    @Test
+    public void testDeleteById() {
+        //given
+        Long idDelete = 2L;
+
+        //when
+        recipeService.deleteById(idDelete);
+
+        //then
+        verify(recipeRepository, times(1)).deleteById(anyLong());
 
     }
 }

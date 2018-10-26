@@ -5,12 +5,14 @@ import dev.jim.recipe.domain.Recipe;
 import dev.jim.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -87,6 +89,24 @@ public class RecipeControllerTest {
                 .andExpect(model().attributeExists("recipe"));
 
         verify(recipeServiceMock, times(1)).findById(anyLong());
+
+    }
+
+    @Test
+    public void testGetDeleteRecipe() throws Exception {
+        Long id = new Long(2L);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        mockMvc.perform(get("/recipe/"+id.intValue()+"/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        ArgumentCaptor<Long> argument = ArgumentCaptor.forClass(Long.class);
+        verify(recipeServiceMock, times(1)).deleteById(argument.capture());
+
+        assertEquals(id, argument.getValue());
+
 
     }
 
