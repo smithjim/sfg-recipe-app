@@ -6,7 +6,10 @@ import dev.jim.recipe.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
@@ -30,7 +33,7 @@ public class RecipeController {
 
     @RequestMapping(RecipeController.BASE_URL + "/{id}/update")
     public String getUpdateRecipe(Model model, @PathVariable Long id) {
-        Recipe recipe = recipeService.findById(id);
+        RecipeCommand recipe = recipeService.findCommandById(id);
         model.addAttribute("recipe", recipe);
         return "recipe/recipeform";
     }

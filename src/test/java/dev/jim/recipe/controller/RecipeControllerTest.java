@@ -59,10 +59,10 @@ public class RecipeControllerTest {
 
     @Test
     public void testGetUpdateView() throws Exception {
-        Recipe updatedRecipe = new Recipe();
+        RecipeCommand updatedRecipe = new RecipeCommand();
         updatedRecipe.setId(2L);
 
-        when(recipeServiceMock.findById(2L)).thenReturn(updatedRecipe);
+        when(recipeServiceMock.findCommandById(2L)).thenReturn(updatedRecipe);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc.perform(get("/recipe/"+updatedRecipe.getId()+"/update"))

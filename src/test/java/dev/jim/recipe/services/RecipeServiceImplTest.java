@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
 
+    private static final Long ID = 1L;
     private static final String DESCRIPTION = "description";
 
     RecipeServiceImpl recipeService;
@@ -52,8 +53,23 @@ public class RecipeServiceImplTest {
 
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
 
+    @Test
+    public void getRecipeCommandById() {
+        Recipe recipe = new Recipe();
+        recipe.setId(ID);
+        Optional<Recipe> opRecipe = Optional.of(recipe);
 
+        when(recipeRepository.findById(anyLong())).thenReturn(opRecipe);
+
+        RecipeCommand recipeReturned = recipeService.findCommandById(ID);
+
+        assertNotNull(recipeReturned);
+        assertEquals(ID, recipeReturned.getId());
+
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, never()).findAll();
     }
 
     @Test
