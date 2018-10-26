@@ -31,7 +31,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testNewRecipe() throws Exception {
+    public void testGetNewRecipe() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         mockMvc.perform(get("/recipe/new"))
@@ -41,7 +41,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void saveRecipe() throws Exception {
+    public void testPostNewRecipe() throws Exception {
         RecipeCommand returnRecipe = new RecipeCommand();
         returnRecipe.setId(2L);
 
@@ -54,7 +54,7 @@ public class RecipeControllerTest {
                 .param("id", "")
                 .param("description", "test description"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/show/2"));
+                .andExpect(view().name("redirect:/recipe/2/show"));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testShowRecipe() throws Exception {
+    public void testGetShowRecipe() throws Exception {
         Recipe r = new Recipe();
         r.setId(1L);
 

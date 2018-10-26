@@ -28,7 +28,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     public Set<Recipe> findAll() {
-        log.debug("I'm in the RecipeServiceIMple");
         Set<Recipe> set = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(set::add);
         return set;
@@ -39,6 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findById(l).orElse(null);
     }
 
+    @Transactional
     @Override
     public RecipeCommand findCommandById(long l) {
         Recipe r = this.findById(l);

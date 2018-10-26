@@ -48,7 +48,7 @@ public class RecipeController {
     @RequestMapping(BASE_URL)//, method = RequestMethod.POST) old method
     public String saveOrUpdate(@ModelAttribute RecipeCommand recipe) {
         RecipeCommand saved = recipeService.saveRecipeCommand(recipe);
-        return "redirect:/recipe/show/" + saved.getId();
+        return "redirect:/recipe/" + saved.getId() + "/show";
     }
 
 }
