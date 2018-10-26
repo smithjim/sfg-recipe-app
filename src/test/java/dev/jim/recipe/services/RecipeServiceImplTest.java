@@ -1,5 +1,7 @@
 package dev.jim.recipe.services;
 
+import dev.jim.recipe.commands.RecipeCommand;
+import dev.jim.recipe.converters.*;
 import dev.jim.recipe.domain.Recipe;
 import dev.jim.recipe.repository.RecipeRepository;
 import org.junit.Before;
@@ -17,6 +19,8 @@ import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
 
+    private static final String DESCRIPTION = "description";
+
     RecipeServiceImpl recipeService;
 
     @Mock
@@ -25,7 +29,13 @@ public class RecipeServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository,
+                new RecipeCommandToRecipe(new NotesCommandToNotes(),
+                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                        new CategoryCommandToCategory()),
+                new RecipeToRecipeCommand(new NotesToNotesCommand(),
+                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                        new CategoryToCategoryCommand()));
     }
 
     @Test
@@ -69,5 +79,26 @@ public class RecipeServiceImplTest {
 
         assertEquals(recipes.size(), 0);
         verify(recipeRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void saveRecipeCommand() {
+
+        Recipe returnRecipe = new Recipe();
+        returnRecipe.setId(1L);
+        returnRecipe.setDescription(DESCRIPTION);
+
+        RecipeCommand recipeCmd = new RecipeCommand();
+        recipeCmd.setDescription(DESCRIPTION);
+
+        when(recipeRepository.save(any(Recipe.class))).thenReturn(returnRecipe);
+
+        RecipeCommand returned = recipeService.saveRecipeCommand(recipeCmd);
+
+        assertEquals(returnRecipe.getId(), returned.getId());
+        assertEquals(DESCRIPTION, returned.getDescription());
+
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+
     }
 }
