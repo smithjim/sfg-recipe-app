@@ -1,6 +1,8 @@
 package dev.jim.recipe.controller;
 
+import dev.jim.recipe.commands.IngredientCommand;
 import dev.jim.recipe.commands.RecipeCommand;
+import dev.jim.recipe.services.IngredientService;
 import dev.jim.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,9 @@ public class IngredientControllerTest {
     @Mock
     RecipeService recipeServiceMock;
 
+    @Mock
+    IngredientService ingredientServiceMock;
+
 
     IngredientController ingredientController;
 
@@ -29,7 +34,7 @@ public class IngredientControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        ingredientController = new IngredientController(recipeServiceMock);
+        ingredientController = new IngredientController(recipeServiceMock, ingredientServiceMock);
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
     }
 
@@ -42,7 +47,7 @@ public class IngredientControllerTest {
         //when
         when(recipeServiceMock.findCommandById(anyLong())).thenReturn(cmd);
 
-        mockMvc.perform(get("/recipe/"+id.toString()+"/ingredients"))
+        mockMvc.perform(get("/recipe/"+id.toString()+"/ingredient"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/list"))
                 .andExpect(model().attributeExists("recipe"));
@@ -51,8 +56,27 @@ public class IngredientControllerTest {
         ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
         verify(recipeServiceMock, times(1)).findCommandById(captor.capture());
         assertEquals(id, captor.getValue());
+    }
 
+    @Test
+    public void testGetShowIngredient() throws Exception {
+        IngredientCommand cmd = new IngredientCommand();
+        cmd.setId(1L);
+        cmd.setRecipeId(2L);
 
+        when(ingredientServiceMock.findByRecipeIdAndId(anyLong(), anyLong())).thenReturn(cmd);
 
+        mockMvc.perform(get("/recipe/" + cmd.getRecipeId() + "/ingredient/" + cmd.getId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
+
+        ArgumentCaptor<Long> idCapture = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<Long> recipeIdCapture = ArgumentCaptor.forClass(Long.class);
+        verify(ingredientServiceMock, times(1))
+                .findByRecipeIdAndId(recipeIdCapture.capture(), idCapture.capture());
+
+        assertEquals(cmd.getId(), idCapture.getValue());
+        assertEquals(cmd.getRecipeId(), recipeIdCapture.getValue());
     }
 }

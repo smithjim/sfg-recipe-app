@@ -19,6 +19,7 @@ public class IngredientToIngredientCommandTest {
     private static final String DESCRIPTION = "description";
     private static final BigDecimal AMOUNT = new BigDecimal("1");
     private static final Long UOM_ID = 2L;
+    private static final Long RECIPE_ID = 1L;
 
     IngredientToIngredientCommand converter;
 
@@ -50,6 +51,7 @@ public class IngredientToIngredientCommandTest {
         ingredient.setAmount(AMOUNT);
         ingredient.setUom(uom);
         ingredient.setRecipe(new Recipe());
+        ingredient.getRecipe().setId(RECIPE_ID);
 
         IngredientCommand cmd = converter.convert(ingredient);
 
@@ -57,6 +59,7 @@ public class IngredientToIngredientCommandTest {
         assertEquals(DESCRIPTION, cmd.getDescription());
         assertEquals(AMOUNT, cmd.getAmount());
         assertEquals(UOM_ID, cmd.getUom().getId());
+        assertEquals(RECIPE_ID, cmd.getRecipeId());
     }
 
     @Test
