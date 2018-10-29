@@ -153,37 +153,17 @@ public class IngredientServiceImplTest {
         UnitOfMeasureCommand uomCmd = new UnitOfMeasureCommand();
         uomCmd.setId(UOM_ID);
         IngredientCommand cmd = new IngredientCommand();
-        cmd.setId(ID);
-        cmd.setDescription(DESCRIPTION);
         cmd.setUom(uomCmd);
         cmd.setRecipeId(RECIPE_ID);
 
-        //saved
-        Recipe savedRecipe = new Recipe();
-        savedRecipe.setId(RECIPE_ID);
-        UnitOfMeasure savedUom = new UnitOfMeasure();
-        savedUom.setId(UOM_ID);
-        Ingredient savedIngredient = new Ingredient();
-        savedIngredient.setId(ID);
-        savedRecipe.addIngredient(savedIngredient);
-
-        //new save state
-        Ingredient saved = new Ingredient();
-        saved.setId(ID);
-        saved.setDescription(DESCRIPTION);
-        saved.setUom(savedUom);
-        saved.setRecipe(savedRecipe);
-
         //when
-        when(recipeService.findById(anyLong())).thenReturn(Optional.of(savedRecipe));
+        when(recipeService.findById(anyLong())).thenReturn(Optional.of(new Recipe()));
         when(uomServiceMock.findById(anyLong())).thenReturn(Optional.empty());
-        when(ingredientRepositoryMock.save(any(Ingredient.class))).thenReturn(saved);
 
         try {
             service.saveIngredientCommand(cmd);
             fail("Should've thrown exception for invalid UnitOfMeasure");
         } catch (RuntimeException e) {
-
         }
     }
 

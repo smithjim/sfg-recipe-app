@@ -44,21 +44,21 @@ public class IngredientServiceImpl implements IngredientService {
             throw new RuntimeException("Can't find Recipe for ingredient!");
         }
 
+        Optional<UnitOfMeasure> uom = uomService.findById(cmd.getUom().getId());
+        if (! uom.isPresent()) {
+            throw new RuntimeException("Invalid UOM");
+        }
+
         Recipe recipe = recipeOp.get();
 
-        Optional<Ingredient> ingredientOp = this.findIngredient(recipe, cmd.getId());
+        Optional<Ingredient> ingredientOp = this.getIngredientFromRecipe(recipe, cmd.getId());
         Ingredient toSave;
 
         if (ingredientOp.isPresent()) {
             Ingredient update = ingredientOp.get();
             update.setAmount(cmd.getAmount());
             update.setDescription(cmd.getDescription());
-            Optional<UnitOfMeasure> uom = uomService.findById(cmd.getUom().getId());
-            if (! uom.isPresent()) {
-                throw new RuntimeException("Invalid UOM");
-            }
             update.setUom(uom.get());
-
             toSave = update;
         } else {
             toSave = toIngredient.convert(cmd);
@@ -70,7 +70,7 @@ public class IngredientServiceImpl implements IngredientService {
         return toIngredientCommand.convert(saved);
     }
 
-    private Optional<Ingredient> findIngredient(Recipe recipe, Long id) {
+    private Optional<Ingredient> getIngredientFromRecipe(Recipe recipe, Long id) {
         return recipe.getIngredients()
                 .stream()
                 .filter(ing -> ing.getId().equals(id))
