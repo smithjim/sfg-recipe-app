@@ -23,6 +23,9 @@ public class IngredientControllerTest {
     @Mock
     RecipeService recipeServiceMock;
 
+    //@Mock
+    //UnitOfMeasureService unitOfMeasureServiceMock;
+
     @Mock
     IngredientService ingredientServiceMock;
 
@@ -66,7 +69,7 @@ public class IngredientControllerTest {
 
         when(ingredientServiceMock.findByRecipeIdAndId(anyLong(), anyLong())).thenReturn(cmd);
 
-        mockMvc.perform(get("/recipe/" + cmd.getRecipeId() + "/ingredient/" + cmd.getId()))
+        mockMvc.perform(get("/recipe/" + cmd.getRecipeId() + "/ingredient/" + cmd.getId() + "/show/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/show"))
                 .andExpect(model().attributeExists("ingredient"));
@@ -78,5 +81,11 @@ public class IngredientControllerTest {
 
         assertEquals(cmd.getId(), idCapture.getValue());
         assertEquals(cmd.getRecipeId(), recipeIdCapture.getValue());
+    }
+
+    public void testUpdateIngredient() throws Exception {
+
+
+
     }
 }
