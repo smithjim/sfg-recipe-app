@@ -15,6 +15,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
@@ -47,9 +48,10 @@ public class RecipeServiceImplTest {
 
         when(recipeRepository.findById(anyLong())).thenReturn(opRecipe);
 
-        Recipe recipeReturned = recipeService.findById(1L);
+        Optional<Recipe> recipeReturned = recipeService.findById(1L);
 
-        assertNotNull(recipeReturned);
+        assertTrue(recipeReturned.isPresent());
+        assertNotNull(recipeReturned.orElse(null));
 
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();

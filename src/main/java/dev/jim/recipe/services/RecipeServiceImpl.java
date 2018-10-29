@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -34,14 +35,14 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(long l) {
-        return recipeRepository.findById(l).orElse(null);
+    public Optional<Recipe> findById(long l) {
+        return recipeRepository.findById(l);
     }
 
     @Transactional
     @Override
     public RecipeCommand findCommandById(long l) {
-        Recipe r = this.findById(l);
+        Recipe r = this.findById(l).orElse(null);
         return recipeToRecipeCommand.convert(r);
     }
 
@@ -50,7 +51,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
         Recipe r = recipeCommandToRecipe.convert(recipeCommand);
 
-        r = recipeRepository.save(r);
+        r = this.saveRecipe(r);
 
         return recipeToRecipeCommand.convert(r);
     }
@@ -58,6 +59,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void deleteById(Long id) {
         recipeRepository.deleteById(id);
+    }
+
+    @Override
+    public Recipe saveRecipe(Recipe recipe) {
+        return recipeRepository.save(recipe);
     }
 
 

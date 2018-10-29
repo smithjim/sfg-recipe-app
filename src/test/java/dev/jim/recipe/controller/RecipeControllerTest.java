@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -81,7 +83,7 @@ public class RecipeControllerTest {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(recipeServiceMock.findById(anyLong())).thenReturn(r);
+        when(recipeServiceMock.findById(anyLong())).thenReturn(Optional.of(r));
 
         mockMvc.perform(get(RecipeController.BASE_URL + "/1/show"))
                 .andExpect(status().isOk())
