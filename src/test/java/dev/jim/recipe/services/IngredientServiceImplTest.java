@@ -195,24 +195,23 @@ public class IngredientServiceImplTest {
         updatedIngredient.setId(ID);
         updatedIngredient.setDescription(DESCRIPTION);
         updatedIngredient.setUom(savedUom);
-        updatedIngredient.setRecipe(savedRecipe);;
+        updatedIngredient.setRecipe(savedRecipe);
 
-        //when
         when(recipeService.findById(anyLong())).thenReturn(Optional.of(savedRecipe));
         when(uomServiceMock.findById(anyLong())).thenReturn(Optional.of(savedUom));
         when(ingredientRepositoryMock.save(any(Ingredient.class))).thenReturn(updatedIngredient);
 
+        //when
         IngredientCommand saved = service.saveIngredientCommand(cmd);
 
         //then
         assertEquals(ID, saved.getId());
-        assertEquals(RECIPE_ID, saved.getRecipeId());
         assertEquals(DESCRIPTION, saved.getDescription());
 
-        ArgumentCaptor<Long> lookupCaptor = ArgumentCaptor.forClass(Long.class);
-        verify(recipeService, times(1)).findById(lookupCaptor.capture());
-        assertEquals(RECIPE_ID, lookupCaptor.getValue());
+        ArgumentCaptor<Ingredient> ingredCaptor = ArgumentCaptor.forClass(Ingredient.class);
+        verify(ingredientRepositoryMock, times(1))
+                .save(ingredCaptor.capture());
 
-        verify(ingredientRepositoryMock, times(1)).save(any(Ingredient.class));
+        assertEquals(DESCRIPTION, ingredCaptor.getValue().getDescription());
     }
 }

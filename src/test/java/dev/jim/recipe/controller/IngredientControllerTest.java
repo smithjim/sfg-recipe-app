@@ -117,7 +117,7 @@ public class IngredientControllerTest {
         Long id = 3L;
         Long uomId = 4L;
 
-        mockMvc.perform(post("/recipe/ingredient")
+        mockMvc.perform(post("/recipe/"+recipeId+"/ingredient")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
                 .param("amount", "0.5")

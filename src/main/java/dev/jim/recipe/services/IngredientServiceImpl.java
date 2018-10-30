@@ -55,11 +55,10 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient toSave;
 
         if (ingredientOp.isPresent()) {
-            Ingredient update = ingredientOp.get();
-            update.setAmount(cmd.getAmount());
-            update.setDescription(cmd.getDescription());
-            update.setUom(uom.get());
-            toSave = update;
+            toSave = ingredientOp.get();
+            toSave.setAmount(cmd.getAmount());
+            toSave.setDescription(cmd.getDescription());
+            toSave.setUom(uom.get());
         } else {
             toSave = toIngredient.convert(cmd);
             toSave.setRecipe(recipe);
